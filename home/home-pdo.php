@@ -26,7 +26,7 @@ class Home extends Connection{
         WHERE prodStatus = 1
         GROUP BY SKU
         ORDER BY prodSellNumber desc
-        LIMIT 8";
+        LIMIT 12";
         $select = $this->prepareSQL($sql);
         $select->execute();
         return $select->fetchAll();
@@ -41,7 +41,7 @@ class Home extends Connection{
         WHERE prodStatus = 1 AND prodCountry = 'Vietnam'
         GROUP BY SKU
         ORDER BY prodSellNumber desc
-        LIMIT 8";
+        LIMIT 12";
         $select = $this->prepareSQL($sql);
         $select->execute();
         return $select->fetchAll();
@@ -58,8 +58,9 @@ class Login extends Connection {
         return $select->fetchAll();
     }
     public function signUp($data){
-        $sql = "INSERT INTO account VALUE (:username, :pass, 0, 0);";
-        $sql = $sql."INSERT INTO customer(cusName, cusGPP) VALUE (:cusName, :cusGPP);";
+        $sql = "INSERT INTO account VALUE (:username, :pass, 0, 0); 
+        INSERT INTO cart VALUE (:username, :username);
+        INSERT INTO customer (cusId, username, cusName, cusGPP) VALUE (:username,:username, :cusName, :cusGPP)";
         $insert = $this->prepareSQL($sql);
         $insert->execute($data);
     }

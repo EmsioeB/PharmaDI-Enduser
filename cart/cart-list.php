@@ -8,7 +8,7 @@ $brandInCart = $cart->getBrandInCart();
 $cartProducts = $cart->getData();
 $cartTotalNum = $cart->totalNum();
 $cartTotalPrice = $cart->totalPrice();
-// print_r($cartTotalPrice);
+// print_r($cartProducts);
 ?>
 
 <head>
@@ -142,10 +142,10 @@ $cartTotalPrice = $cart->totalPrice();
                 <div class="cart-list-prod-list">
                     <div class="cart-list-prod-list-brand">
                         <span style = "font-size: 18px; color: #505050; font-weight: 600"><?= $brand['brandName'] ?></span>
-                        <!-- <img src="<$brand['brandLogo'] ?>" alt="brand"> -->
+                        <!-- <img src="<$brand['brandLogo'] ?>" alt="brand">
                         <div style="display: flex; align-items: center">
                             <button class="delete-all">Xoá tất cả</button>
-                        </div>
+                        </div> -->
                     </div>
                     <?php foreach ($cartProducts as $prod): 
                         if($prod['brandId'] == $brand['brandId']) {
@@ -161,7 +161,7 @@ $cartTotalPrice = $cart->totalPrice();
                                     <span style="font-weight: 500; font-size: 12px;"><?= $prod['prodUnit'] ?></span>
                                 </div>
                             </div>
-                            <form  method="GET" style="grid-column: span 3; display: flex; align-items: center; margin: 0" id="plus-number" onclick="document.getElementById('plus-number').submit()">
+                            <form  action="action-plus.php" method="GET" style="grid-column: span 3; display: flex; align-items: center; margin: 0" id="plus-number" onclick="document.getElementById('plus-number').submit()">
                                 <div class="plus-number">
                                     <button type="button" onclick="decrease('quantity-cart-<?= $prod['SKU']?>')"  style="font-size: 13px; text-align: center; display: flex; justify-content: center; align-items: center">
                                         <svg width="11" height="2.5" viewBox="0 0 11 3" fill="none"
@@ -171,7 +171,8 @@ $cartTotalPrice = $cart->totalPrice();
                                                 fill="#505050" />
                                         </svg>
                                     </button>
-                                    <input type="number" style="font-size: 13px; text-align: center;" value="<?= $prod['prodCartNum']?>" id="quantity-cart-<?= $prod['SKU']?>">
+                                    <input type="hidden" name="prodId" value="<?= $prod['SKU'] ?>">
+                                    <input type="number" name="number" style="font-size: 13px; text-align: center;" value="<?= $prod['prodCartNum']?>" id="quantity-cart-<?= $prod['SKU']?>">
                                     <button type="button" onclick="increase('quantity-cart-<?= $prod['SKU']?>')" style="font-size: 13px; text-align: center; display: flex; justify-content: center; align-items: center">
                                         <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +186,7 @@ $cartTotalPrice = $cart->totalPrice();
                                     </button>
                                 </div>
                             </form>
-                            <span style="display: flex; align-items: center; font-weight: 600; font-size: 16px; color: #0071AF; padding: 5px 0;grid-column: span 2"><?= number_format($prod['prodPriceSale'])?></span>
+                            <span style="display: flex; align-items: center; font-weight: 600; font-size: 16px; color: #0071AF; padding: 5px 0;grid-column: span 2"><?= number_format($prod['prodPriceSale'])?>đ</span>
                             <div style="grid-column: span 4; display: flex; align-items: center; justify-content: end; grid-column: span 2">
                                 <svg style="cursor: pointer" width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="window.location.href='http://localhost/PharmaDI-Enduser/cart/action-delete.php?prodId=<?=$prod['SKU']?>'">
                                     <path

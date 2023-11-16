@@ -6,10 +6,12 @@ require_once "product-pdo.php";
 $product = new Product();
 $prod = $product->getDetailData($_GET['prodId'])[0];
 $prodBrands = $product->getDataByBrand($prod['brandId']);
+$brand = new Brand();
 ?>
 
 <head>
     <title>Chi tiết sản phẩm</title>
+    <script src="cdn.tailwindcss.com"></script>
     <style>
         input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -239,9 +241,9 @@ span:hover{
                             </div>
                         </div>
                         <div class="prod-info-top-button">
-                            <form action="">
+                            <form action="action-insert-cart.php" method="GET">
                                 <div class="plus-number">
-                                    <button>
+                                    <button type="button" onclick="decrease('plus-number')">
                                         <svg width="11" height="3" viewBox="0 0 11 3" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -249,8 +251,9 @@ span:hover{
                                                 fill="#505050" />
                                         </svg>
                                     </button>
-                                    <input type="number">
-                                    <button>
+                                    <input type="hidden" class="text-[13px]" name="prodId" value="<?=$_GET['prodId']?>">
+                                    <input type="number" class="text-[13px] text-center" id="plus-number" name="prodCartNum" value=0>
+                                    <button type="button" onclick="increase('plus-number')">
                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -292,9 +295,8 @@ span:hover{
                 <div style="padding-bottom: 20px; background-color: white; border-radius: 10px; padding: 20px">
                     <div style="display: flex; justify-content: space-between; ">
                         <span style="font-weight: 600; color: #0071AF"><?= $prod['brandName']?> </span>
-                        <span
-                            style="padding: 5px 10px; color: #505050; border: 1px solid #d8d8d8; border-radius: 20px; font-size: 12px;">09
-                            sản phẩm</span>
+                        <span onclick="window.location.href='http://localhost/PharmaDI-Enduser/product/product-list.php?brandName=<?= $prod['brandName'] ?>'"
+                            style="padding: 5px 10px; color: #505050; border: 1px solid #d8d8d8; border-radius: 20px; font-size: 12px;"><?=$brand->countProduct($prod['brandId'])[0]['num'];?> sản phẩm</span>
                     </div>
                     <div style="font-size: 13px; margin-top: 20px"><?= $prod['brandDescription']?> </div>
                 </div>
@@ -302,7 +304,7 @@ span:hover{
                     <div class="title-lowercase">Sản phẩm cùng thương hiệu</div>
                     <div style=" padding: 10px 30px">
                     <?php foreach ($prodBrands as $prodBrand): ?>
-                        <div style="margin-bottom: 10px">
+                        <div style="margin-bottom: 10px" onclick="window.location.href='http://localhost/PharmaDI-Enduser/product/product-detail.php?prodId=<?= $prodBrand['SKU'] ?>'">
                             <div class="prod">
                                 <div class="prod-img">
                                     <img src="<?= $prodBrand['imgPath'] ?>" alt="product">
@@ -312,7 +314,7 @@ span:hover{
                                         style="font-weight: 600; font-size: 12px; padding: 5px 0; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= $prodBrand['prodName'] ?></span>
                                     <span style="font-weight: 500; font-size: 12px;"><?= $prodBrand['prodUnit'] ?></span>
                                     <span
-                                        style="font-weight: 600; font-size: 16px; color: #0071AF; padding: 5px 0;"><?= number_format($prodBrand['prodPriceSale']) ?></span>
+                                        style="font-weight: 600; font-size: 16px; color: #0071AF; padding: 5px 0;"><?= number_format($prodBrand['prodPriceSale']) ?>đ</span>
                                 </div>
                             </div>
                         </div>
@@ -334,6 +336,12 @@ span:hover{
         document.querySelector('.prod-descript-active').classList.toggle('prod-descript-active')
         document.getElementById(id).classList.toggle('prod-descript-active')
         document.getElementById(id).classList.toggle('prod-descript-deactive')
+    }
+        function increase(id) {
+        document.getElementById(id).value = parseInt(document.getElementById(id).value) + 1
+    }
+    function decrease(id) {
+        document.getElementById(id).value = parseInt(document.getElementById(id).value) - 1
     }
     
 </script>
